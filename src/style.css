@@ -1,0 +1,705 @@
+/* ================= 1. ШРИФТЫ, ОБНУЛЕНИЕ И ПЕРЕМЕННЫЕ ================= */
+:root {
+    --bg-dark: #0a0a0c;
+    --bg-card: #13131a;
+    --border-color: #22222e;
+    --text-main: #f3f3f6;
+    --text-muted: #8e8e9f;
+    --accent-purple: #8a2be2;
+    --accent-neon: #a147ff;
+    --accent-green: #00ffaa;
+    --font-title: 'Cinzel', Georgia, serif;
+    --font-body: 'Manrope', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ================= 2. АДАПТИВНАЯ ОБОЛОЧКА (APP WRAPPER) ================= */
+.app-wrapper {
+    width: 100%;
+    max-width: 480px; /* Идеальный мобильный размер по умолчанию */
+    height: 100vh;
+    max-height: 880px;
+    position: relative;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* МЕДИАЗАПРОС: Если экран большой (ПК или планшет), делаем сайт просторнее */
+@media (min-width: 768px) {
+    .app-wrapper {
+        max-width: 900px; /* Расширяем сетку для компьютеров */
+        height: 85vh;
+        border-radius: 24px;
+        border-color: #1c1c24;
+    }
+}
+
+/* Базовый класс для экранов */
+.screen-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px;
+    z-index: 1;
+    overflow-y: auto;
+}
+
+.screen-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ================= 3. ДОРОГИЕ ЭФФЕКТЫ СВЕЧЕНИЯ ================= */
+.ambient-glow {
+    position: absolute;
+    top: -20%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+    animation: slowPulse 8s infinite alternate ease-in-out;
+}
+
+.final-glow {
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(0, 255, 170, 0.1) 0%, transparent 60%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes slowPulse {
+    0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+    100% { transform: scale(1.2) translate(5%, 5%); opacity: 1; }
+}
+
+/* ================= 4. ТИПОГРАФИКА И ЭЛЕМЕНТЫ ================= */
+.brand-logo {
+    font-family: var(--font-title);
+    font-size: 14px;
+    letter-spacing: 6px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.main-title {
+    font-family: var(--font-title);
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.main-subtitle, .section-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.section-title {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.back-link {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+}
+.back-link:hover { color: var(--text-main); }
+
+/* Медиа-контейнеры */
+.visual-container {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 30px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.media-element, .media-element-final {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+}
+
+/* ================= 5. СЕТКА КАТЕГОРИЙ И КАРТОЧКИ ================= */
+.categories-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0 auto;
+}
+
+/* На ПК сетка категорий становится в 2 колонки */
+@media (min-width: 768px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin: auto 0;
+    }
+}
+
+.category-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-card:hover {
+    border-color: var(--accent-purple);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(138, 43, 226, 0.15);
+}
+
+.cat-icon { font-size: 24px; }
+.cat-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+/* ================= 6. СПИСОК ГРЕХОВ (QUIZ) ================= */
+.sins-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding-right: 4px;
+}
+
+/* На ПК грехи тоже выстраиваются в красивую двухколоночную сетку */
+@media (min-width: 768px) {
+    .sins-list-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+.sin-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 18px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.sin-card:hover {
+    border-color: #333344;
+}
+
+.sin-card.selected {
+    border-color: var(--accent-neon);
+    background: rgba(161, 71, 255, 0.08);
+    box-shadow: 0 0 15px rgba(161, 71, 255, 0.1);
+}
+
+/* ================= 7. ТЕКСТОВАЯ ИСПОВЕДЬ ================= */
+#custom-confession-text {
+    width: 100%;
+    height: 180px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    margin-bottom: 40px;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    border-color: var(--accent-purple);
+}
+
+/* ================= 8. СФЕРА УНИЧТОЖЕНИЯ ================= */
+.energy-sphere {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #1a1a26 0%, #050508 100%);
+    border: 1px solid rgba(138, 43, 226, 0.4);
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-title);
+    font-size: 28px;
+    color: var(--text-main);
+    cursor: pointer;
+    user-select: none;
+    margin: auto auto;
+    transition: transform 0.1s ease, border-color 0.2s;
+}
+
+.energy-sphere.hit {
+    border-color: var(--accent-neon);
+    box-shadow: 0 0 50px rgba(161, 71, 255, 0.5);
+}
+
+.tap-indicator {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin-top: 20px;
+    margin-bottom: auto;
+    text-transform: uppercase;
+}
+
+/* ================= 9. ФИНАЛЬНАЯ КАРТОЧКА ЕПИТИМЬИ ================= */
+.final-layout {
+    justify-content: center;
+    align-items: center;
+}
+
+.celebration-title {
+    font-family: var(--font-title);
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--accent-green);
+}
+
+.celebration-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.epitimia-card {
+    width: 100%;
+    background: linear-gradient(145deg, #111118, #161622);
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    border-radius: 20px;
+    padding: 30px 24px;
+    margin-bottom: 40px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 255, 170, 0.03);
+}
+
+.card-badge {
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: var(--accent-green);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.epitimia-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-main);
+    text-align: left;
+}
+
+/* ================= 10. КНОПКИ С КЛАССАМИ ================= */
+.actions-block, .footer-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.action-button {
+    width: 100%;
+    padding: 18px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--text-main);
+    color: var(--bg-dark);
+}
+.btn-primary:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+    color: var(--text-main);
+    border-color: #444;
+}
+
+.btn-restart {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+.btn-restart:hover {
+    border-color: var(--text-main);
+}
+
+.action-button.disabled {
+    background: #1c1c24;
+    color: #444452;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+/* ================= 11. СТИЛИ ДЛЯ СВОДКИ СТАТИСТИКИ (LIVE BADGE) ================= */
+.live-stats-badge {
+    background: rgba(0, 255, 170, 0.05);
+    border: 1px solid rgba(0, 255, 170, 0.15);
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    color: var(--text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto 30px auto;
+    font-family: var(--font-body);
+}
+
+.live-stats-badge strong {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+/* Мигающая зеленая точка "Live" */
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-green);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(0, 255, 170, 0.7);
+    animation: dotPulse 1.6s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes dotPulse {
+    to {
+        box-shadow: 0 0 0 8px rgba(0, 255, 170, 0);
+    }
+}
+
+/* ================= 12. СТИЛИ ДЛЯ ЧЕКБОКСА ПОДДЕРЖКИ ================= */
+.support-checkbox-wrapper {
+    margin-bottom: 30px;
+    padding: 0 4px;
+}
+
+.custom-checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.custom-checkbox-container:hover {
+    color: var(--text-main);
+}
+
+.custom-checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.custom-checkbox-container:hover input ~ .checkmark {
+    border-color: var(--accent-purple);
+}
+
+.custom-checkbox-container input:checked ~ .checkmark {
+    background-color: var(--accent-purple);
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* ================= 13. БЛОКИ НА ФИНАЛЬНОМ ЭКРАНЕ ================= */
+.social-action-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.block-sub-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.block-description {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.btn-secondary-neon {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--accent-purple);
+    padding: 12px 16px;
+    font-size: 12px;
+}
+.btn-secondary-neon:hover {
+    background: rgba(138, 43, 226, 0.1);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.2);
+}
+
+.author-support-block {
+    text-align: center;
+    padding: 0 10px;
+    margin-bottom: 35px;
+}
+
+.author-support-block p {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.donation-link {
+    font-size: 13px;
+    color: var(--accent-green);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    display: inline-block;
+}
+.donation-link:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 170, 0.4);
+}
+/* ================= 14. СТИЛИ ДЛЯ СТЕНЫ ЖИВЫХ ГРЕХОВ ================= */
+.wall-stream-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 20px;
+}
+
+.wall-card {
+    background: linear-gradient(145deg, #12121a, #181824);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.3s;
+}
+
+.wall-card:hover {
+    border-color: rgba(138, 43, 226, 0.3);
+}
+
+.wall-card-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-main);
+    font-style: italic;
+}
+
+.wall-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 12px;
+}
+
+.wall-card-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-support-action {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 170, 0.3);
+    color: var(--accent-green);
+    padding: 6px 12px;
+    font-size: 11px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-support-action:hover {
+    background: rgba(0, 255, 170, 0.1);
+    box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+}
+
+/* Стили для всплывающего окошка поддержки */
+.support-input-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+.support-input-block textarea {
+    width: 100%;
+    height: 60px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--text-main);
+    font-size: 12px;
+    font-family: var(--font-body);
+    resize: none;
+    outline: none;
+}
+
+.support-input-block textarea:focus {
+    border-color: var(--accent-purple);
+}
+
+.btn-send-support {
+    align-self: flex-end;
+    background: var(--text-main);
+    color: var(--bg-dark);
+    border: none;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

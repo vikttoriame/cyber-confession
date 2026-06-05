@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE:SOUL // Цифровая Исповедальня</title>
+    <!-- Подключаем шрифты от Google для дорогого и эстетичного вида -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- АУДИОСИСТЕМА -->
+    <audio id="bg-music" src="assets/audio/ambient.mp3" loop></audio>
+    <audio id="click-sound" src="assets/audio/meow.mp3"></audio>
+    <audio id="destroy-sound" src="assets/audio/destroy.mp3"></audio>
+    <audio id="final-sound" src="assets/audio/final-sound.mp3"></audio>
+
+    <!-- ГЛАВНАЯ ОБОЛОЧКА САЙТА (адаптивная) -->
+    <main class="app-wrapper">
+        
+        <!-- ================= ЭКРАН 1: СТАРТ (Atmosphere) ================= -->
+        <section id="screen-start" class="screen-view">
+            <div class="ambient-glow"></div>
+            
+            <div class="screen-content">
+                <!-- ПЕРЕНЕСЛИ СЮДА: Живая сводка статистики комьюнити -->
+                <div class="live-stats-badge">
+                    <span class="pulse-dot"></span>
+                    Сегодня очистили душу: <strong id="global-counter">4,205</strong> человек
+                </div>
+
+                <div class="brand-logo">КИБЕР-ИСПОВЕДЬ</div>
+                
+                <div class="visual-container">
+                    <img src="assets/images/cat-start.gif" alt="Погружение" class="media-element">
+                </div>
+                
+                <h1 class="main-title">Готов ли ты заглянуть в себя?</h1>
+                <p class="main-subtitle">Искренний разговор о том, что тяготит душу. Без осуждения и канонов.</p>
+                
+                <div class="actions-block">
+                    <button id="btn-start-yes" class="action-button btn-primary">Начать исповедь</button>
+                    <!-- ДОБАВИЛИ КНОПКУ: Переход на стену грехов -->
+                    <button id="btn-open-wall" class="action-button btn-secondary-neon">Читать чужие исповеди 👥</button>
+                    <button id="btn-start-no" class="action-button btn-secondary">Мне страшно</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-wall" class="screen-view hidden">
+            <div class="screen-content">
+                <button id="btn-back-from-wall" class="back-link">← Вернуться на главную</button>
+                
+                <h2 class="section-title">Стена кибер-исповедей</h2>
+                <p class="section-subtitle">Секреты и откровения таких же людей, как и ты. Без осуждения.</p>
+                
+                <div class="wall-stream-container" id="wall-stream">
+                    </div>
+            </div>
+        </section>
+
+       </section> <section id="screen-categories" class="screen-view hidden">
+    <div class="screen-content">
+        <h2 class="section-title">Выбери сферу жизни</h2>
+        <p class="section-subtitle">Где сейчас сложнее всего держать баланс?</p>
+        
+        <div class="categories-grid">
+            <button class="category-card" data-category="relations">
+                <span class="cat-icon">💔</span>
+                <span class="cat-title">Отношения</span>
+            </button>
+            <button class="category-card" data-category="self">
+                <span class="cat-icon">🧘‍♂️</span>
+                <span class="cat-title">Внутреннее «Я»</span>
+            </button>
+            <button class="category-card" data-category="digital">
+                <span class="cat-icon">📱</span>
+                <span class="cat-title">Цифровая жизнь</span>
+            </button>
+            <button class="category-card" data-category="work">
+                <span class="cat-icon">⏳</span>
+                <span class="cat-title">Дела & Учеба</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+        <!-- ================= ЭКРАН 3: СПИСОК ГРЕХОВ (Quiz) ================= -->
+        <section id="screen-quiz" class="screen-view hidden">
+            <div class="screen-content">
+                <button id="btn-back-to-cats" class="back-link">← Вернуться к категориям</button>
+                <h2 class="section-title" id="current-category-title">Что тебя гложет?</h2>
+                
+                <div class="sins-list-container" id="sins-container">
+                    <!-- Сюда JavaScript подгружает грехи выбранной категории -->
+                </div>
+
+                <div class="footer-actions">
+                    <button id="btn-to-text-confession" class="action-button btn-primary disabled" disabled>Перейти к сокровенному</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ЭКРАН 4: ТЕКСТОВАЯ ИСПОВЕДЬ ================= -->
+        <section id="screen-text-confession" class="screen-view hidden">
+            <div class="screen-content">
+                <h2 class="section-title">Осталось то, о чем нет кнопок?</h2>
+                <p class="section-subtitle">Выпиши текстом то, что не вошло в списки. Эти строки сотрутся навсегда и никуда не сохранятся.</p>
+                
+                <textarea id="custom-confession-text" placeholder="Мне стыдно за то, что я... (необязательно)"></textarea>
+                
+                <!-- Галочка согласия на анонимную поддержку (задел на будущее!) -->
+                <div class="support-checkbox-wrapper">
+                    <label class="custom-checkbox-container">
+                        <input type="checkbox" id="checkbox-allow-support">
+                        <span class="checkmark"></span>
+                        Я хочу анонимно получить слова поддержки от других людей
+                    </label>
+                </div>
+                
+                <div class="footer-actions">
+                    <button id="btn-to-destroy" class="action-button btn-primary">Сформировать ком грехов</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ЭКРАН 5: УНИЧТОЖЕНИЕ (Тапалка) ================= -->
+        <section id="screen-destroy" class="screen-view hidden">
+            <div class="screen-content">
+                <h2 class="section-title">Твоя тяжесть материализовалась</h2>
+                <p class="section-subtitle">Разрушь этот ком быстрыми тапами, чтобы отпустить всё написанное</p>
+                
+                <div id="sin-sphere" class="energy-sphere">
+                    <span id="sphere-hp">100%</span>
+                </div>
+                
+                <div class="tap-indicator">ЖМИ БЫСТРО</div>
+            </div>
+        </section>
+
+        <!-- ================= ЭКРАН 6: ФИНАЛ & ЕПИТИМЬЯ ================= -->
+        <section id="screen-finish" class="screen-view hidden">
+            <div class="final-glow"></div>
+            <div class="screen-content final-layout">
+                <div class="visual-container final-visual">
+                    <img src="assets/images/cat-finish.gif" alt="Очищение" class="media-element-final">
+                </div>
+                
+                <h1 class="celebration-title">Ты молодец, больше так не делай!</h1>
+                <p class="celebration-subtitle">Твои секреты стерты из цифрового мира. Душа чиста.</p>
+                
+                <!-- Блок Епитимьи -->
+                <div class="epitimia-card">
+                    <div class="card-badge">Твоё задание на сегодня</div>
+                    <p id="epitimia-text">...</p>
+                </div>
+
+                <!-- БЛОК: Социальное действие и Добрые дела -->
+                <div class="social-action-card">
+                    <h3 class="block-sub-title">Хочешь сделать мир лучше?</h3>
+                    <p class="block-description">Переведи ментальное очищение в реальное действие. Наш интерактивный гид поможет найти фонд или стать волонтером.</p>
+                    <button id="btn-open-charity" class="action-button btn-secondary-neon">Стать волонтером / Помочь фонду</button>
+                </div>
+
+                <!-- БЛОК: Благодарность создателю (Донаты) -->
+                <div class="author-support-block">
+                    <p>Сайт создан силами одного человека без цензуры и рекламы казино. Если твоя душа очистилась, ты можешь угостить монастырского кота сосиской 🤍</p>
+                    <a href="#" target="_blank" class="donation-link">Угостить кота сосиской (Чаевые) 🐾</a>
+                </div>
+                
+                <button id="btn-restart" class="action-button btn-restart">Очистить душу снова 🔄</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
